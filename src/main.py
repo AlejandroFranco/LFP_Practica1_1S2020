@@ -1,4 +1,5 @@
 import re
+import webbrowser
 import tkinter as tk
 from tkinter import filedialog
 
@@ -43,8 +44,9 @@ class Main:
             elif entrada == "4":
                 self.mostrarTodo()
                 self.menu()
-            # elif entrada == "5":
-            #
+            elif entrada == "5":
+                self.desplegarArchivo()
+                self.menu()
             elif entrada == "6":
                 print("\n"+"201708993")
                 print("Pablo Alejandro Franco Lemus")
@@ -55,6 +57,34 @@ class Main:
                 raw_input("Presione una tecla"+"\n")
         else:
             self.menu()
+
+    def cadenaMostrarTodo(self):
+        cadena_final = ""
+        for lista in self.listas:
+            cadena_final += "<tr><td>" + lista.nombre + "</td>"
+            for comando in lista.comandos:
+                comando.nombre = re.sub(r"\s+", "", comando.nombre)
+                if comando.nombre == "BUSCAR":
+                    if comando.parametro in lista.numeros:
+                        cadena_final += "<td>" + str(lista.numeros.index(comando.parametro)) + "</td>"
+                    else:
+                        cadena_final += "<td>" + "No encontrado" + "</td>"
+                else:
+                    a = sorted(lista.numeros, reverse=False)
+                    cadena_final += "<td>" + ','.join(a) + "</td>"
+        return cadena_final
+
+    def desplegarArchivo(self):
+        archivo = open("modelo.html", "r")
+        modelo = archivo.read()
+        archivo.close()
+        pagina_resultado = open("resultado.html", "w+")
+        indice = modelo.index("</table>")
+        nuevo_contenido = modelo[0:indice] + self.cadenaMostrarTodo() + modelo[indice:len(modelo)]
+
+        pagina_resultado.write(nuevo_contenido)
+
+        webbrowser.open_new_tab("resultado.html")
 
     def mostrarTodo(self):
         for lista in self.listas:
@@ -127,3 +157,4 @@ class Main:
             self.listas.append(Lista(nombre, numeros.split(","), lista_comandos))
 
 Main().menu()
+
