@@ -158,4 +158,3 @@ class Main:
             self.listas.append(Lista(nombre, numeros.split(","), lista_comandos))
 
 Main().menu()
-
