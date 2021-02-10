@@ -2,7 +2,6 @@ import re
 import webbrowser
 import tkinter as tk
 from tkinter import filedialog
-
 from pip._vendor.distlib.compat import raw_input
 
 
@@ -39,6 +38,7 @@ class Main:
                 self.menu()
             elif entrada == "2":
                 self.listasOrdenadas()
+                self.menu()
             elif entrada == "3":
                 self.busquedas()
                 self.menu()
@@ -123,7 +123,7 @@ class Main:
 
     def cargarArchivo(self):
         root = tk.Tk()
-        # root.withdraw()
+        root.withdraw()
         nombre_archivo = filedialog.askopenfilename(initialdir="/", title="Seleccionar un archivo",
                                                     filetypes=(("texto", "*.txt"), ("todos", "*.*")))
         try:
