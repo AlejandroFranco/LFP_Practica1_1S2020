@@ -24,6 +24,7 @@ class Main:
     contenido_archivo = ""
 
     def menu(self):
+        print("\n")
         print("1 Cargar archivo de entrada")
         print("2 Desplegar listas ordenadas")
         print("3 Desplegar busquedas")
@@ -62,16 +63,18 @@ class Main:
         cadena_final = ""
         for lista in self.listas:
             cadena_final += "<tr><td>" + lista.nombre + "</td>"
+            cadena_final += "<td>" + ','.join(lista.numeros) + "</td>"
             for comando in lista.comandos:
                 comando.nombre = re.sub(r"\s+", "", comando.nombre)
                 if comando.nombre == "BUSCAR":
                     if comando.parametro in lista.numeros:
-                        cadena_final += "<td>" + str(lista.numeros.index(comando.parametro)) + "</td>"
+                        cadena_final += "<td>" + comando.nombre + " " + comando.parametro + ": " + str([i for i, x in enumerate(lista.numeros) if x == comando.parametro]) + "</td>"
                     else:
-                        cadena_final += "<td>" + "No encontrado" + "</td>"
+                        cadena_final += "<td>" + comando.nombre + ": " + "No encontrado" + "</td>"
                 else:
                     a = sorted(lista.numeros, reverse=False)
-                    cadena_final += "<td>" + ','.join(a) + "</td>"
+                    cadena_final += "<td>" + comando.nombre + ": " + ','.join(a) + "</td>"
+        cadena_final += "</tr>"
         return cadena_final
 
     def desplegarArchivo(self):
@@ -81,9 +84,7 @@ class Main:
         pagina_resultado = open("resultado.html", "w+")
         indice = modelo.index("</table>")
         nuevo_contenido = modelo[0:indice] + self.cadenaMostrarTodo() + modelo[indice:len(modelo)]
-
         pagina_resultado.write(nuevo_contenido)
-
         webbrowser.open_new_tab("resultado.html")
 
     def mostrarTodo(self):
@@ -107,7 +108,7 @@ class Main:
                 comando.nombre = re.sub(r"\s+", "", comando.nombre)
                 if comando.nombre == "BUSCAR":
                     if comando.parametro in lista.numeros:
-                        print("Posición: "+str(lista.numeros.index(comando.parametro))+"\n")
+                        print("Posición: "+str([i for i , x in enumerate(lista.numeros) if x ==comando.parametro]))
                     else:
                         print("No encontrado")
 
