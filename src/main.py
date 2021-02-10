@@ -39,6 +39,7 @@ class Main:
             elif entrada == "2":
                 self.listasOrdenadas()
                 self.menu()
+
             elif entrada == "3":
                 self.busquedas()
                 self.menu()
