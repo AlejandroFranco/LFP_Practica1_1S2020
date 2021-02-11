@@ -39,7 +39,6 @@ class Main:
             elif entrada == "2":
                 self.listasOrdenadas()
                 self.menu()
-
             elif entrada == "3":
                 self.busquedas()
                 self.menu()
@@ -50,13 +49,13 @@ class Main:
                 self.desplegarArchivo()
                 self.menu()
             elif entrada == "6":
-                print("\n"+"201708993")
+                print("\n" + "201708993")
                 print("Pablo Alejandro Franco Lemus")
                 print("alejandrofranco21815@gmail.com")
                 print("Lenguajes Formales y de Programación")
                 print("-A")
-                print("17/02/2021"+"\n")
-                raw_input("Presione una tecla"+"\n")
+                print("17/02/2021" + "\n")
+                raw_input("Presione una tecla" + "\n")
         else:
             self.menu()
 
@@ -69,11 +68,13 @@ class Main:
                 comando.nombre = re.sub(r"\s+", "", comando.nombre)
                 if comando.nombre == "BUSCAR":
                     if comando.parametro in lista.numeros:
-                        cadena_final += "<td>" + comando.nombre + " " + comando.parametro + ": " + str([i for i, x in enumerate(lista.numeros) if x == comando.parametro]) + "</td>"
+                        cadena_final += "<td>" + comando.nombre + " " + comando.parametro + ": " + str(
+                            [i for i, x in enumerate(lista.numeros) if x == comando.parametro]) + "</td>"
                     else:
                         cadena_final += "<td>" + comando.nombre + ": " + "No encontrado" + "</td>"
                 else:
-                    a = sorted(lista.numeros, reverse=False)
+                   # a = sorted(lista.numeros, reverse=False)
+                    a = self.quicksortLista(lista.numeros)
                     cadena_final += "<td>" + comando.nombre + ": " + ','.join(a) + "</td>"
         cadena_final += "</tr>"
         return cadena_final
@@ -99,7 +100,8 @@ class Main:
                     else:
                         print("No encontrado")
                 else:
-                    a = sorted(lista.numeros, reverse=False)
+                  # a = sorted(lista.numeros, reverse=False)
+                    a = self.quicksortLista(lista.numeros)
                     print(*a, sep=", ")
             print("\n")
 
@@ -109,18 +111,35 @@ class Main:
                 comando.nombre = re.sub(r"\s+", "", comando.nombre)
                 if comando.nombre == "BUSCAR":
                     if comando.parametro in lista.numeros:
-                        print("Posición: "+str([i for i , x in enumerate(lista.numeros) if x ==comando.parametro]))
+                        print("Posición: " + str([i for i, x in enumerate(lista.numeros) if x == comando.parametro]))
                     else:
                         print("No encontrado")
 
     def listasOrdenadas(self):
         for lista in self.listas:
-           for comando in lista.comandos:
-               if comando.nombre == "ORDENAR":
-                    a = sorted(lista.numeros, reverse=False)
+            for comando in lista.comandos:
+                if comando.nombre == "ORDENAR":
+                    # a = sorted(lista.numeros, reverse=False)
+                    a = self.quicksortLista(lista.numeros)
                     print("Lista: " + lista.nombre)
                     print(*a, sep=", ")
                     print("\n")
+
+    def quicksortLista(self, lista_numeros):
+        longitud = len(lista_numeros)
+        if longitud <= 1:
+            return lista_numeros
+        else:
+            pivote = lista_numeros.pop()
+        elementos_mayores = []
+        elementos_menores = []
+        for elemento in lista_numeros:
+            if elemento > pivote:
+                elementos_mayores.append(elemento)
+            else:
+                elementos_menores.append(elemento)
+
+        return self.quicksortLista(elementos_menores) + [pivote]+self.quicksortLista(elementos_mayores)
 
     def cargarArchivo(self):
         root = tk.Tk()
@@ -157,5 +176,6 @@ class Main:
                     parametro_comando = ""
                 lista_comandos.append(Comando(nombre_comando, parametro_comando))
             self.listas.append(Lista(nombre, numeros.split(","), lista_comandos))
+
 
 Main().menu()
