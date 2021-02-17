@@ -71,10 +71,10 @@ class Main:
                         cadena_final += "<td>" + comando.nombre + " " + comando.parametro + ": " + str(
                             [i for i, x in enumerate(lista.numeros) if x == comando.parametro]) + "</td>"
                     else:
-                        cadena_final += "<td>" + comando.nombre + ": " + "No encontrado" + "</td>"
+                        cadena_final += "<td>" + comando.nombre + ": " + "No encontrado: " + comando.parametro +"</td>"
                 else:
-                   # a = sorted(lista.numeros, reverse=False)
-                    a = self.quicksortLista(lista.numeros)
+                    #a = sorted(lista.numeros, reverse=False)
+                    a = self.quicksortLista(self.copiarLista(lista.numeros))
                     cadena_final += "<td>" + comando.nombre + ": " + ','.join(a) + "</td>"
         cadena_final += "</tr>"
         return cadena_final
@@ -96,12 +96,12 @@ class Main:
                 comando.nombre = re.sub(r"\s+", "", comando.nombre)
                 if comando.nombre == "BUSCAR":
                     if comando.parametro in lista.numeros:
-                        print("Posición: " + str(lista.numeros.index(comando.parametro)))
+                        print("Posición: " + str([i for i, x in enumerate(lista.numeros) if x == comando.parametro]))
                     else:
-                        print("No encontrado")
+                        print("No encontrado: " + str(comando.parametro))
                 else:
-                  # a = sorted(lista.numeros, reverse=False)
-                    a = self.quicksortLista(lista.numeros)
+                    #a = sorted(lista.numeros, reverse=False)
+                    a = self.quicksortLista(self.copiarLista(lista.numeros))
                     print(*a, sep=", ")
             print("\n")
 
@@ -113,17 +113,23 @@ class Main:
                     if comando.parametro in lista.numeros:
                         print("Posición: " + str([i for i, x in enumerate(lista.numeros) if x == comando.parametro]))
                     else:
-                        print("No encontrado")
+                        print("No encontrado: "+str(comando.parametro))
 
     def listasOrdenadas(self):
         for lista in self.listas:
             for comando in lista.comandos:
                 if comando.nombre == "ORDENAR":
                     # a = sorted(lista.numeros, reverse=False)
-                    a = self.quicksortLista(lista.numeros)
+                    a = self.quicksortLista(self.copiarLista(lista.numeros))
                     print("Lista: " + lista.nombre)
                     print(*a, sep=", ")
                     print("\n")
+
+    def copiarLista(self, lista_original):
+        a = []
+        for i in lista_original:
+            a.append(i)
+        return a
 
     def quicksortLista(self, lista_numeros):
         longitud = len(lista_numeros)
@@ -143,7 +149,7 @@ class Main:
 
     def cargarArchivo(self):
         root = tk.Tk()
-        root.withdraw()
+        # root.withdraw()
         nombre_archivo = filedialog.askopenfilename(initialdir="/", title="Seleccionar un archivo",
                                                     filetypes=(("texto", "*.txt"), ("todos", "*.*")))
         try:
@@ -176,6 +182,5 @@ class Main:
                     parametro_comando = ""
                 lista_comandos.append(Comando(nombre_comando, parametro_comando))
             self.listas.append(Lista(nombre, numeros.split(","), lista_comandos))
-
 
 Main().menu()
